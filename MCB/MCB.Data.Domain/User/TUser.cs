@@ -11,6 +11,8 @@ namespace MCB.Data.Domain.User
         public string Id { get; set; }
 
         public string UserName { get; set; }
+
+        public List<UserTrip> UserTrips { get; set; }
         public List<UserCountry> UserCountries { get; set; }
     }
 }

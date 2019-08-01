@@ -23,8 +23,11 @@ namespace MCB.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //UserCountry
-            modelBuilder.Entity<UserCountry>().Property(c => c.CountryKnowledgeType).HasConversion<string>();
-            modelBuilder.Entity<UserCountry>().HasKey(s => new { s.CountryId, s.TUserId });
+            modelBuilder.Entity<UserCountry>().Property(uc => uc.CountryKnowledgeType).HasConversion<string>();
+            modelBuilder.Entity<UserCountry>().HasKey(uc => new { uc.CountryId, uc.TUserId });
+
+            //UserTrip
+            modelBuilder.Entity<UserTrip>().HasKey(ut => new { ut.TripId, ut.TUserId });
         }
     }
 }
