@@ -1,4 +1,7 @@
-﻿namespace MCB.Data.Domain.Geo
+﻿using MCB.Data.Domain.User;
+using System.Collections.Generic;
+
+namespace MCB.Data.Domain.Geo
 {
     public class Country
     {
@@ -15,5 +18,7 @@
 
         public int? RegionId { get; set; }
         public Region Region { get; set; }
+
+        public List<UserCountry> UserCountries { get; set; }
     }
 }
