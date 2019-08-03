@@ -19,10 +19,10 @@ namespace MCB.Data.Domain.Trips
         public int TripId { get; set; }
         public Trip Trip { get; set; }
 
-        public int CountryId { get; set; }
+        public int? CountryId { get; set; }
         public Country Country { get; set; }
 
-        public int WorldHeritageId { get; set; }
+        public int? WorldHeritageId { get; set; }
         public WorldHeritage WorldHeritage { get; set; }
     }
 }

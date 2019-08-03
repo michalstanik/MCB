@@ -13,6 +13,7 @@ namespace MCB.Data.Domain.Trips
         public string Name { get; set; }
 
         public List<UserTrip> UserTrips { get; set; }
+        public List<Stop> Stops { get; set; }
 
         public TUser TripManager { get; set; }
     }
