@@ -1,5 +1,7 @@
 ﻿using MCB.Data.Domain.Geo;
+using MCB.Data.Domain.Trips;
 using MCB.Data.Domain.User;
+using MCB.Data.Domain.WorldHeritages;
 using Microsoft.EntityFrameworkCore;
 
 namespace MCB.Data
@@ -20,6 +22,15 @@ namespace MCB.Data
         public DbSet<TUser> TUser { get; set; }
         public DbSet<UserCountry> UserCountry { get; set; }
 
+        //Trip
+        public DbSet<Trip> Trip { get; set; }
+        public DbSet<Stop> Stop { get; set; }
+
+
+        //WorldHeritage
+        public DbSet<WorldHeritage> WorldHeritage { get; set; }
+        public DbSet<WorldHeritageCountry> WorldHeritageCountry { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //UserCountry
@@ -28,6 +39,9 @@ namespace MCB.Data
 
             //UserTrip
             modelBuilder.Entity<UserTrip>().HasKey(ut => new { ut.TripId, ut.TUserId });
+
+            //WorldHeritage
+            modelBuilder.Entity<WorldHeritageCountry>().HasKey(s => new { s.WorldHeritageId, s.CountryId });
         }
     }
 }

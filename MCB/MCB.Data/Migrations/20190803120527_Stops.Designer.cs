@@ -4,14 +4,16 @@ using MCB.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MCB.Data.Migrations
 {
     [DbContext(typeof(MCBContext))]
-    partial class MCBContextModelSnapshot : ModelSnapshot
+    [Migration("20190803120527_Stops")]
+    partial class Stops
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,15 +100,11 @@ namespace MCB.Data.Migrations
 
                     b.Property<int>("TripId");
 
-                    b.Property<int>("WorldHeritageId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
 
                     b.HasIndex("TripId");
-
-                    b.HasIndex("WorldHeritageId");
 
                     b.ToTable("Stop");
                 });
@@ -171,44 +169,6 @@ namespace MCB.Data.Migrations
                     b.ToTable("UserTrip");
                 });
 
-            modelBuilder.Entity("MCB.Data.Domain.WorldHeritages.WorldHeritage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ImageUrl");
-
-                    b.Property<string>("IsoCodes");
-
-                    b.Property<string>("Latitude");
-
-                    b.Property<string>("Location");
-
-                    b.Property<string>("Longitude");
-
-                    b.Property<string>("Region");
-
-                    b.Property<string>("UnescoId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WorldHeritage");
-                });
-
-            modelBuilder.Entity("MCB.Data.Domain.WorldHeritages.WorldHeritageCountry", b =>
-                {
-                    b.Property<int>("WorldHeritageId");
-
-                    b.Property<int>("CountryId");
-
-                    b.HasKey("WorldHeritageId", "CountryId");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("WorldHeritageCountry");
-                });
-
             modelBuilder.Entity("MCB.Data.Domain.Geo.Country", b =>
                 {
                     b.HasOne("MCB.Data.Domain.Geo.Region", "Region")
@@ -233,11 +193,6 @@ namespace MCB.Data.Migrations
                     b.HasOne("MCB.Data.Domain.Trips.Trip", "Trip")
                         .WithMany()
                         .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("MCB.Data.Domain.WorldHeritages.WorldHeritage", "WorldHeritage")
-                        .WithMany()
-                        .HasForeignKey("WorldHeritageId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -271,19 +226,6 @@ namespace MCB.Data.Migrations
                     b.HasOne("MCB.Data.Domain.Trips.Trip", "Trip")
                         .WithMany("UserTrips")
                         .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("MCB.Data.Domain.WorldHeritages.WorldHeritageCountry", b =>
-                {
-                    b.HasOne("MCB.Data.Domain.Geo.Country", "Country")
-                        .WithMany("WoldHeritageCountries")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("MCB.Data.Domain.WorldHeritages.WorldHeritage", "WorldHeritage")
-                        .WithMany("WoldHeritageCountries")
-                        .HasForeignKey("WorldHeritageId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

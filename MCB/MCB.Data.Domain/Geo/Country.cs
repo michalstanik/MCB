@@ -1,4 +1,6 @@
-﻿using MCB.Data.Domain.User;
+﻿using MCB.Data.Domain.Trips;
+using MCB.Data.Domain.User;
+using MCB.Data.Domain.WorldHeritages;
 using System.Collections.Generic;
 
 namespace MCB.Data.Domain.Geo
@@ -20,5 +22,7 @@ namespace MCB.Data.Domain.Geo
         public Region Region { get; set; }
 
         public List<UserCountry> UserCountries { get; set; }
+        public List<Stop> CountryStops { get; set; }
+        public List<WorldHeritageCountry> WoldHeritageCountries { get; set; }
     }
 }
