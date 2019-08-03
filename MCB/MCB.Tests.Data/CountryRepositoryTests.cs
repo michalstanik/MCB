@@ -89,6 +89,44 @@ namespace MCB.Tests.Data
             }
         }
 
+        [Fact]
+        public async Task GetCountriesForTrip_TripWithTwoStopsAndOneCountry_ListOfOneCountry()
+        {
+            var dbOptions = GetDbOptions();
+            //Arrange
+            using (var context = new MCBContext(dbOptions))
+            {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
+
+                var trip1 = new Trip()
+                {
+                    Id = 8,
+                    Name = "Trip 1",
+                    Stops = new List<Stop>()
+                    {
+                      new Stop() { Name = "Stop 1", CountryId = 5, Country = new Country{ Id = 5, Name = "Poland" } },
+                      new Stop() { Name = "Stop 2", CountryId = 5, Country = new Country{ Id = 5, Name = "Poland" } }
+                    }
+                };
+
+                context.Add(trip1);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = new MCBContext(dbOptions))
+            {
+                var geoRepository = new GeoRepository(context);
+
+                // Act
+                var countries = await geoRepository.GetCountriesForTrip(8);
+
+                // Assert
+                Assert.Single(countries);
+            }
+        }
+
+
         private DbContextOptions<MCBContext> GetDbOptions()
         {
             var connectionStringBuilder =
