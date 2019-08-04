@@ -1,5 +1,7 @@
 ﻿
 using MCB.Data;
+using MCB.Data.Repositories;
+using MCB.Data.RepositoriesInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +42,8 @@ namespace MCB.App
             });
 
             services.AddTransient<MCBDictionarySeeder>();
+            services.AddScoped<IGeoRepository, GeoRepository>();
+            services.AddScoped<ITripRepository, TripRepository>();
 
             services.AddDbContext<MCBContext>(cfg =>
             {
