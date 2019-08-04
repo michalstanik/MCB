@@ -8,6 +8,7 @@ namespace MCB.Data.Domain.Trips
         public Trip()
         {
             UserTrips = new List<UserTrip>();
+            Stops = new List<Stop>();
         }
         public int Id { get; set; }
         public string Name { get; set; }
