@@ -6,20 +6,23 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace MCB.Tests.Data
 {
     public class CountryRepositoryTests
     {
-        public CountryRepositoryTests()
-        {
+        private readonly ITestOutputHelper _output;
 
+        public CountryRepositoryTests(ITestOutputHelper output)
+        {
+            _output = output;
         }
 
         [Fact]
         public async Task GetCountriesForTrip_TripNotExists_EmptyListOfCountries()
         {
-            var dbOptions = DbSettingHellper.GetDbOptions();
+            var dbOptions = DbSettingHellper.GetDbOptions(_output);
             //Arrange
             using (var context = new MCBContext(dbOptions))
             {
@@ -50,7 +53,7 @@ namespace MCB.Tests.Data
         [Fact]
         public async Task GetCountriesForTrip_TripWithNoStops_EmptyListOfCountries()
         {
-            var dbOptions = DbSettingHellper.GetDbOptions();
+            var dbOptions = DbSettingHellper.GetDbOptions(_output);
             //Arrange
             using (var context = new MCBContext(dbOptions))
             {
@@ -81,7 +84,7 @@ namespace MCB.Tests.Data
         [Fact]
         public async Task GetCountriesForTrip_TripWithOneStops_ListOfOneCountry()
         {
-            var dbOptions = DbSettingHellper.GetDbOptions();
+            var dbOptions = DbSettingHellper.GetDbOptions(_output);
             //Arrange
             using (var context = new MCBContext(dbOptions))
             {
@@ -119,7 +122,7 @@ namespace MCB.Tests.Data
         [Fact]
         public async Task GetCountriesForTrip_TripWithTwoStopsAndOneCountry_ListOfOneCountry()
         {
-            var dbOptions = DbSettingHellper.GetDbOptions();
+            var dbOptions = DbSettingHellper.GetDbOptions(_output);
             //Arrange
             using (var context = new MCBContext(dbOptions))
             {
