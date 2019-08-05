@@ -10,11 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" />
@@ -22,6 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MCB.Business.CoreHelper\MCB.Business.CoreHelper.csproj" />
+    <ProjectReference Include="..\MCB.Business.Models\MCB.Business.Models.csproj" />
+    <ProjectReference Include="..\MCB.Data.Domain\MCB.Data.Domain.csproj" />
     <ProjectReference Include="..\MCB.Data\MCB.Data.csproj" />
   </ItemGroup>
 

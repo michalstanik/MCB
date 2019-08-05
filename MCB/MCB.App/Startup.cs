@@ -1,15 +1,18 @@
 ﻿
+using AutoMapper;
 using MCB.Data;
 using MCB.Data.Repositories;
 using MCB.Data.RepositoriesInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Linq;
 
 namespace MCB.App
 {
@@ -27,19 +30,36 @@ namespace MCB.App
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc()
-                .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore) //ignores self reference object 
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1); //validate api rules
-
-            services.AddSwaggerGen(c =>
+            services.AddMvc(setupAction =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                var jsonOutputFormatter = setupAction.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
+
+                if (jsonOutputFormatter != null)
+                {
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.trip+json");
+                }
+            })
+            .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore) //ignores self reference object 
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1); //validate api rules
+
+            services.AddSwaggerGen(setupAction =>
+            {
+                setupAction.SwaggerDoc("MCBAPISpecification", new Info { Title = "My API", Version = "v1" });
+
+
+                setupAction.ResolveConflictingActions(apiDesscriptions =>
+                {
+                    return apiDesscriptions.First();
+                });
+
             });
 
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "wwwroot/clientapp/dist";
             });
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddTransient<MCBDictionarySeeder>();
             services.AddScoped<IGeoRepository, GeoRepository>();
