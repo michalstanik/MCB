@@ -8,6 +8,7 @@ namespace MCB.Data.LoadData
 {
     public class CountriesModel
     {
+#pragma warning disable IDE1006 // Naming Styles
         public class Nld
         {
             public string official { get; set; }
@@ -190,8 +191,11 @@ namespace MCB.Data.LoadData
             public string demonym { get; set; }
             public bool landlocked { get; set; }
             public List<object> borders { get; set; }
+
             public long area { get; set; }
+
             public string flag { get; set; }
+#pragma warning restore IDE1006 // Naming Styles
         }
     }
 }
