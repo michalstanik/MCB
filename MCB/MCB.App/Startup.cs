@@ -62,6 +62,7 @@ namespace MCB.App
             services.AddAutoMapper(typeof(Startup));
 
             services.AddTransient<MCBDictionarySeeder>();
+            services.AddTransient<MCBDataSeeder>();
             services.AddScoped<IGeoRepository, GeoRepository>();
             services.AddScoped<ITripRepository, TripRepository>();
 
@@ -120,8 +121,14 @@ namespace MCB.App
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
                     var recreateDbOption = Configuration.GetSection("DevelopmentEnvironmentSettings").GetSection("RecreateDatabaseEachTime").Value;
-                    var seeder = scope.ServiceProvider.GetService<MCBDictionarySeeder>();
-                    seeder.Seed(recreateDbOption).Wait();
+
+                    //1
+                    var dictionarySeeder = scope.ServiceProvider.GetService<MCBDictionarySeeder>();
+                    dictionarySeeder.Seed(recreateDbOption).Wait();
+
+                    //2
+                    var dataSeeder = scope.ServiceProvider.GetService<MCBDataSeeder>();
+                    dataSeeder.Seed().Wait();
                 }
             }
         }
