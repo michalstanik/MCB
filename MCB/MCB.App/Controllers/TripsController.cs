@@ -58,6 +58,13 @@ namespace MCB.App.Controllers
             return await GetSpecificTrip<TripWithCountriesAndStatsModel>(id, true, true);
         }
 
+        [HttpGet("{id}")]
+        [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithcountriesandworldheritages+json" })]
+        public async Task<IActionResult> GetTripWithCountriesAndWorldHeritages(int id)
+        {
+            return await GetSpecificTrip<TripWithCountriesAndWorldHeritagesModel>(id, true, true);
+        }
+
         private async Task<IActionResult> GetSpecificTrip<T>(int tripId, bool includeStops = false, bool includeUsers = false) where T : class
         {
             var tripFromRepo = await _repository.GetTrip(tripId, includeStops, includeUsers);

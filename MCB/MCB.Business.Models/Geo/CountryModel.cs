@@ -8,5 +8,6 @@
         public string Alpha3Code { get; set; }
         public long Area { get; set; }
         public string RegionName { get; set; }
+        public string RegionContinentName { get; set; }
     }
 }
