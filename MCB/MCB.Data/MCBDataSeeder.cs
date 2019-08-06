@@ -16,8 +16,13 @@ namespace MCB.Data
             _context = context;
         }
 
-        public async Task Seed()
+        public async Task Seed(string recreateDbOption)
         {
+            if (recreateDbOption != "True")
+            {
+                return;
+            }
+
             var firstUser = new TUser() { Id = "fec0a4d6-5830-4eb8-8024-272bd5d6d2bb", UserName = "Michał" };
 
             var countryAzerbaijan = _context.Country.Where(c => c.Alpha3Code == "AZE").FirstOrDefault();

@@ -37,6 +37,10 @@ namespace MCB.App
                 if (jsonOutputFormatter != null)
                 {
                     jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.trip+json");
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.tripwithstops+json");
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.tripwithstopsandusers+json");
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.tripwithcountries+json");
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.tripwithcountriesandstats+json");
                 }
             })
             .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore) //ignores self reference object 
@@ -128,7 +132,7 @@ namespace MCB.App
 
                     //2
                     var dataSeeder = scope.ServiceProvider.GetService<MCBDataSeeder>();
-                    dataSeeder.Seed().Wait();
+                    dataSeeder.Seed(recreateDbOption).Wait();
                 }
             }
         }

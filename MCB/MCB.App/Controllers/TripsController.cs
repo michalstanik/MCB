@@ -23,11 +23,39 @@ namespace MCB.App.Controllers
             _linkGenerator = linkGenerator;
         }
 
-        [HttpGet("{id}", Name = "GetTrip")]
+        [HttpGet("{id}")]
         [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.trip+json" })]
         public async Task<IActionResult> GetTrip(int id)
         {
             return await GetSpecificTrip<TripModel>(id);
+        }
+
+        [HttpGet("{id}")]
+        [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithstops+json" })]
+        public async Task<IActionResult> GetTripWithStops(int id)
+        {
+            return await GetSpecificTrip<TripWithStopsModel>(id, true);
+        }
+
+        [HttpGet("{id}")]
+        [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithstopsandusers+json" })]
+        public async Task<IActionResult> GetTripWithStopsAndUsers(int id)
+        {
+            return await GetSpecificTrip<TripWithStopsAndUsersModel>(id, true, true);
+        }
+
+        [HttpGet("{id}")]
+        [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithcountries+json" })]
+        public async Task<IActionResult> GetTripWithCountries(int id)
+        {
+            return await GetSpecificTrip<TripWithCountriesModel>(id, true);
+        }
+
+        [HttpGet("{id}")]
+        [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithcountriesandstats+json" })]
+        public async Task<IActionResult> GetTripWithCountriesAndStats(int id)
+        {
+            return await GetSpecificTrip<TripWithCountriesAndStatsModel>(id, true, true);
         }
 
         private async Task<IActionResult> GetSpecificTrip<T>(int tripId, bool includeStops = false, bool includeUsers = false) where T : class
