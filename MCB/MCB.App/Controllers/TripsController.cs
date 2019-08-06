@@ -23,6 +23,11 @@ namespace MCB.App.Controllers
             _linkGenerator = linkGenerator;
         }
 
+        /// <summary>
+        /// Get an Trip by id
+        /// </summary>
+        /// <param name="id">Id of the Trip</param>
+        /// <returns>An Trip based on the MediaType</returns>
         [HttpGet("{id}")]
         [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.trip+json" })]
         public async Task<IActionResult> GetTrip(int id)

@@ -12,7 +12,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace MCB.App
 {
@@ -49,8 +52,17 @@ namespace MCB.App
 
             services.AddSwaggerGen(setupAction =>
             {
-                setupAction.SwaggerDoc("MCBAPISpecification", new Info { Title = "My API", Version = "v1" });
+                setupAction.SwaggerDoc("MCBOpenAPISpecification", 
+                    new Microsoft.OpenApi.Models.OpenApiInfo()
+                    {
+                        Title = "MCB API",
+                        Version = "1"
+                    });
 
+                //Use of reflection to cobime a XML document with assembly path
+                var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlCommentFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+                setupAction.IncludeXmlComments(xmlCommentFullPath);
 
                 setupAction.ResolveConflictingActions(apiDesscriptions =>
                 {
@@ -93,15 +105,18 @@ namespace MCB.App
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseHttpsRedirection();
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
             // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(setupAction =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                setupAction.SwaggerEndpoint("/swagger/MCBOpenAPISpecification/swagger.json", "MCB API");
+                setupAction.RoutePrefix = "api";
+
+           
             });
 
             app.UseMvc();
