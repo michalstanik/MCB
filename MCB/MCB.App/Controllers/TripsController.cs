@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace MCB.App.Controllers
 {
     [Route("api/trips/")]
+    [Produces("application/json")]
     [ApiController]
     public class TripsController : ControllerBase
     {
@@ -31,7 +32,7 @@ namespace MCB.App.Controllers
         /// <returns>An Trip based on the MediaType</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.trip+json" })]
+        [RequestHeaderMatchesMediaType("Accept", new[] {"application/vnd.mcb.trip+json" })]
         public async Task<ActionResult<TripModel>> GetTrip(int id)
         {
             return await GetSpecificTrip<TripModel>(id);
@@ -39,6 +40,7 @@ namespace MCB.App.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/vnd.mcb.tripwithstops+json")]
         [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithstops+json" })]
         public async Task<ActionResult<TripWithStopsModel>> GetTripWithStops(int id)
         {
@@ -47,6 +49,7 @@ namespace MCB.App.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/vnd.mcb.tripwithstopsandusers+json")]
         [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithstopsandusers+json" })]
         public async Task<ActionResult<TripWithStopsAndUsersModel>> GetTripWithStopsAndUsers(int id)
         {
