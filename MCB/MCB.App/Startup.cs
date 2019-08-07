@@ -5,6 +5,7 @@ using MCB.Data.Repositories;
 using MCB.Data.RepositoriesInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -35,6 +36,19 @@ namespace MCB.App
         {
             services.AddMvc(setupAction =>
             {
+                setupAction.Filters.Add(
+                    new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest));
+                setupAction.Filters.Add(
+                    new ProducesResponseTypeAttribute(StatusCodes.Status406NotAcceptable));
+                setupAction.Filters.Add(
+                    new ProducesResponseTypeAttribute(StatusCodes.Status500InternalServerError));
+                setupAction.Filters.Add(
+                    new ProducesDefaultResponseTypeAttribute());
+
+                setupAction.ReturnHttpNotAcceptable = true;
+
+                setupAction.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+
                 var jsonOutputFormatter = setupAction.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
 
                 if (jsonOutputFormatter != null)
@@ -45,10 +59,36 @@ namespace MCB.App
                     jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.tripwithcountries+json");
                     jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.tripwithcountriesandstats+json");
                     jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.tripwithcountriesandworldheritages+json");
+
+                    if (jsonOutputFormatter.SupportedMediaTypes.Contains("text/json"))
+                    {
+                        jsonOutputFormatter.SupportedMediaTypes.Remove("text/json");
+                    }
                 }
             })
             .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore) //ignores self reference object 
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1); //validate api rules
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2); //validate api rules
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var actionExecutingContext =
+                        actionContext as Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext;
+
+                    // if there are modelstate errors & all keys were correctly
+                    // found/parsed we're dealing with validation errors
+                    if (actionContext.ModelState.ErrorCount > 0
+                        && actionExecutingContext?.ActionArguments.Count == actionContext.ActionDescriptor.Parameters.Count)
+                    {
+                        return new UnprocessableEntityObjectResult(actionContext.ModelState);
+                    }
+
+                    // if one of the keys wasn't correctly found / couldn't be parsed
+                    // we're dealing with null/unparsable input
+                    return new BadRequestObjectResult(actionContext.ModelState);
+                };
+            });
 
             services.AddSwaggerGen(setupAction =>
             {
@@ -131,6 +171,7 @@ namespace MCB.App
 
                 if (env.IsDevelopment())
                 {
+                    spa.Options.StartupTimeout = new TimeSpan(days: 0, hours: 0, minutes: 1, seconds: 30);
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });

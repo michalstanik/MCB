@@ -60,6 +60,7 @@ namespace MCB.Data.Domain.Trips
             return worlHeritage;
         }
 
+        //TODO: Add new fetures: 1. Year of Trip (start) 2. TripStart and End Date 3. Number of days        
         public IDictionary<string, int> Statistics()
         {
             var statistics = new Dictionary<string, int>
