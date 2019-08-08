@@ -32,7 +32,10 @@ namespace MCB.App.Controllers
         /// <returns>An Trip based on the MediaType</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [RequestHeaderMatchesMediaType("Accept", new[] {"application/vnd.mcb.trip+json" })]
+        [Produces("application/vnd.mcb.trip+json")]
+        [RequestHeaderMatchesMediaType("Accept", new[] {
+            "application/json",
+            "application/vnd.mcb.trip+json" })]
         public async Task<ActionResult<TripModel>> GetTrip(int id)
         {
             return await GetSpecificTrip<TripModel>(id);
@@ -58,6 +61,7 @@ namespace MCB.App.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/vnd.mcb.tripwithcountries+json")]
         [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithcountries+json" })]
         public async Task<ActionResult<TripWithCountriesModel>> GetTripWithCountries(int id)
         {
@@ -66,6 +70,7 @@ namespace MCB.App.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/vnd.mcb.tripwithcountriesandstats+json")]
         [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithcountriesandstats+json" })]
         public async Task<ActionResult<TripWithCountriesAndStatsModel>> GetTripWithCountriesAndStats(int id)
         {
@@ -74,6 +79,7 @@ namespace MCB.App.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/vnd.mcb.tripwithcountriesandworldheritages+json")]
         [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithcountriesandworldheritages+json" })]
         public async Task<ActionResult<TripWithCountriesAndWorldHeritagesModel>> GetTripWithCountriesAndWorldHeritages(int id)
         {
