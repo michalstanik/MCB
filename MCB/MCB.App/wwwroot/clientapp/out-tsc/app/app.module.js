@@ -5,7 +5,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MDBSpinningPreloader, MDBBootstrapModulesPro, ToastModule } from 'ng-uikit-pro-standard';
 import { AppComponent } from './app.component';
 var AppModule = /** @class */ (function () {
     function AppModule() {
@@ -16,9 +19,13 @@ var AppModule = /** @class */ (function () {
                 AppComponent
             ],
             imports: [
-                BrowserModule
+                BrowserModule,
+                BrowserAnimationsModule,
+                FormsModule,
+                ToastModule.forRoot(),
+                MDBBootstrapModulesPro.forRoot(),
             ],
-            providers: [],
+            providers: [MDBSpinningPreloader],
             bootstrap: [AppComponent]
         })
     ], AppModule);

@@ -1,5 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MDBSpinningPreloader, MDBBootstrapModulesPro, ToastModule  } from 'ng-uikit-pro-standard';
 
 import { AppComponent } from './app.component';
 
@@ -8,9 +11,13 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule
+      BrowserModule,
+      BrowserAnimationsModule,
+      FormsModule,
+      ToastModule.forRoot(),
+      MDBBootstrapModulesPro.forRoot(),
   ],
-  providers: [],
+  providers: [MDBSpinningPreloader],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
