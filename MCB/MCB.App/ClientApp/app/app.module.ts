@@ -2,20 +2,31 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { MDBSpinningPreloader, MDBBootstrapModulesPro, ToastModule  } from 'ng-uikit-pro-standard';
 
+//Components
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
+//Modules
+import { CoreModule } from './core/core.module';
+import { AppRoutingModule } from './app-routing.module';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+      AppComponent,
+      HomeComponent
   ],
   imports: [
       BrowserModule,
       BrowserAnimationsModule,
       FormsModule,
+      HttpClientModule,
       ToastModule.forRoot(),
       MDBBootstrapModulesPro.forRoot(),
+      CoreModule,
+      AppRoutingModule
   ],
   providers: [MDBSpinningPreloader],
   bootstrap: [AppComponent]
