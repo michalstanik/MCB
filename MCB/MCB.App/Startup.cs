@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using IdentityServer4.AccessTokenValidation;
 using MCB.App.OperationFilters;
 using MCB.Data;
 using MCB.Data.Repositories;
@@ -8,13 +9,16 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -37,6 +41,8 @@ namespace MCB.App
         {
             services.AddMvc(setupAction =>
             {
+                setupAction.Filters.Add(new AuthorizeFilter());
+
                 setupAction.ReturnHttpNotAcceptable = true;
 
                 var jsonOutputFormatter = setupAction.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
@@ -59,26 +65,13 @@ namespace MCB.App
             .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore) //ignores self reference object 
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2); //validate api rules
 
-            //services.Configure<ApiBehaviorOptions>(options =>
-            //{
-            //    options.InvalidModelStateResponseFactory = actionContext =>
-            //    {
-            //        var actionExecutingContext =
-            //            actionContext as Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext;
-
-            //        // if there are modelstate errors & all keys were correctly
-            //        // found/parsed we're dealing with validation errors
-            //        if (actionContext.ModelState.ErrorCount > 0
-            //            && actionExecutingContext?.ActionArguments.Count == actionContext.ActionDescriptor.Parameters.Count)
-            //        {
-            //            return new UnprocessableEntityObjectResult(actionContext.ModelState);
-            //        }
-
-            //        // if one of the keys wasn't correctly found / couldn't be parsed
-            //        // we're dealing with null/unparsable input
-            //        return new BadRequestObjectResult(actionContext.ModelState);
-            //    };
-            //});
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            .AddIdentityServerAuthentication(options =>
+            {
+                            //TODO: STS should be as config parameter
+                            options.Authority = "https://localhost:8001";
+                options.ApiName = "tripwithmeapi";
+            });
 
             services.AddSwaggerGen(setupAction =>
             {
@@ -91,6 +84,34 @@ namespace MCB.App
 
                 setupAction.OperationFilter<TripOperationFilter>();
 
+                setupAction.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme()
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Implicit = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri("https://localhost:8001/connect/authorize", UriKind.Absolute),
+                            Scopes = new Dictionary<string, string>
+                            {
+                                { "tripwithmeapi", "Trip With Me API" }
+                            }
+                        }
+                    }
+
+                });
+
+                setupAction.OperationFilter<AuthorizeCheckOperationFilter>(); // Required to use access token
+                setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+                        },
+                        new[] { "tripwithmeapi", "Trip With Me API" }
+                    }
+                });
                 //Use of reflection to cobime a XML document with assembly path
                 var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlCommentFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
@@ -100,7 +121,6 @@ namespace MCB.App
                 {
                     return apiDesscriptions.First();
                 });
-
             });
 
             services.AddSpaStaticFiles(configuration =>
@@ -145,15 +165,19 @@ namespace MCB.App
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(setupAction =>
             {
-                setupAction.SwaggerEndpoint("/swagger/MCBOpenAPISpecification/swagger.json", "MCB API");
-                setupAction.RoutePrefix = "api";
 
-           
+                setupAction.RoutePrefix = string.Empty;
+                setupAction.SwaggerEndpoint("/swagger/MCBOpenAPISpecification/swagger.json", "MCB API");
+                //setupAction.RoutePrefix = "";
+
+                setupAction.OAuthClientId("mcb_api_swagger");
+                setupAction.InjectJavascript("../assets/swaggerinit.js");
             });
 
             app.UseMvc();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseAuthentication();
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,

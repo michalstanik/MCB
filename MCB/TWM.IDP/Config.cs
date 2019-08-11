@@ -62,6 +62,18 @@ namespace TWM.IDP
             {
                 new Client
                 {
+                    ClientId = "mcb_api_swagger",
+                    ClientName = "Swagger UI for MCB",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris =
+                    {
+                        "http://localhost:9001/swagger-oauth2-redirect.html"
+                    },
+                    AllowedScopes = { "tripwithmeapi" }
+                },
+                new Client
+                {
                     ClientName = "Trip With Me",
                     ClientId="tripwithmeclient",
                     AllowedGrantTypes = GrantTypes.Implicit,
