@@ -8,6 +8,8 @@ import { MDBSpinningPreloader, MDBBootstrapModulesPro, ToastModule  } from 'ng-u
 //Components
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
+import { HeaderComponent } from './header/header.component';
+
 //Modules
 import { CoreModule } from './core/core.module';
 import { AppRoutingModule } from './app-routing.module';
@@ -16,7 +18,8 @@ import { AppRoutingModule } from './app-routing.module';
 @NgModule({
   declarations: [
       AppComponent,
-      HomeComponent
+      HomeComponent, 
+      HeaderComponent
   ],
   imports: [
       BrowserModule,
