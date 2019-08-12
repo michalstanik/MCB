@@ -66,11 +66,16 @@ namespace TWM.IDP
                     ClientName = "Swagger UI for MCB",
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
+                    AccessTokenLifetime = 180,
                     RedirectUris =
                     {
-                        "http://localhost:9001/swagger-oauth2-redirect.html"
+                        "https://localhost:9001/api/oauth2-redirect.html"
+                
                     },
-                    AllowedScopes = { "tripwithmeapi" }
+                    AllowedScopes = new []
+                    {
+                        "tripwithmeapi"
+                    }
                 },
                 new Client
                 {
