@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using TWM.IDP.Data;
 
 namespace TWM.IDP
 {
@@ -31,21 +32,27 @@ namespace TWM.IDP
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDbContext>(builder =>
+                builder.UseSqlServer(_connectionString, sqlOptions => sqlOptions.MigrationsAssembly(_migrationsAssembly)));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddMvc();
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+            //var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
-                // this adds the operational data from DB (codes, tokens, consents)
                 .AddOperationalStore(options =>
                     options.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(_connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+                        builder.UseSqlServer(_connectionString, sqlOptions => sqlOptions.MigrationsAssembly(_migrationsAssembly)))
                 .AddConfigurationStore(options =>
                     options.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(_connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+                        builder.UseSqlServer(_connectionString, sqlOptions => sqlOptions.MigrationsAssembly(_migrationsAssembly)))
                 .AddTestUsers(Config.GetUsers())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryClients(Config.GetClients());
+                .AddInMemoryClients(Config.GetClients())
+                .AddAspNetIdentity<IdentityUser>();
 
 
             services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
