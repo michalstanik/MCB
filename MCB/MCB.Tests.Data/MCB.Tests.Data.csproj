@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MCB.App\MCB.App.csproj" />
     <ProjectReference Include="..\MCB.Data.Domain\MCB.Data.Domain.csproj" />
     <ProjectReference Include="..\MCB.Data\MCB.Data.csproj" />
   </ItemGroup>
