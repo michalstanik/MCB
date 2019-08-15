@@ -36,14 +36,14 @@ namespace TWM.IDP
                     RequireConsent = false,
                     AllowAccessTokensViaBrowser = true,
                     AccessTokenLifetime = 180,
-                    RedirectUris =           { "https://localhost:9001/assets/oidc-login-redirect.html" },
-                    PostLogoutRedirectUris = { "https://localhost:9001/?postLogout=true" },
-                    AllowedCorsOrigins =     { "https://localhost:9001/" },
+                    RedirectUris =           { "https://localhost:4200/assets/oidc-login-redirect.html" },
+                    PostLogoutRedirectUris = { "https://localhost:4200/?postLogout=true" },
+                    AllowedCorsOrigins =     { "https://localhost:4200/" },
                     AllowedScopes = new []
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "roles",
+                        "role",
                         "tripwithmeapi"
                     }
                 }

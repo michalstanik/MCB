@@ -111,7 +111,7 @@ namespace MCB.Api.Controllers
 
             if(userPermissionToTheTrip != true && _userInfoService.Role != "Administrator")
             {
-                return Unauthorized(StatusCodes.Status403Forbidden);
+                return Forbid();
             }
 
             return Ok(_mapper.Map<T>(tripFromRepo));
