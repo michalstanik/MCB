@@ -21,6 +21,7 @@ namespace MCB.Data
         //User
         public DbSet<TUser> TUser { get; set; }
         public DbSet<UserCountry> UserCountry { get; set; }
+        public DbSet<UserTrip> UserTrip { get; set; }
 
         //Trip
         public DbSet<Trip> Trip { get; set; }

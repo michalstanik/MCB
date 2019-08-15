@@ -1,4 +1,5 @@
 ﻿using MCB.Data.Domain.Trips;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MCB.Data.RepositoriesInterfaces
@@ -12,5 +13,6 @@ namespace MCB.Data.RepositoriesInterfaces
         //Get
         Task<Trip> GetTrip(int tripId, bool includeStops = false, bool includeUsers = false);
         Task<bool> CheckUserPermissionsForTrip(int tripId, string userId);
+        Task<List<Trip>> GetTripsByUser(string userId, bool includeStops, bool includeUsers);
     }
 }

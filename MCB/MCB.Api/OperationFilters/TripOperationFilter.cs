@@ -20,11 +20,33 @@ namespace MCB.Api.OperationFilters
                 { "application/vnd.mcb.tripwithcountriesandworldheritages+json", typeof(TripWithCountriesAndWorldHeritagesModel) }
             };
 
+            var mediaTypesGetTripsDictionary = new Dictionary<string, Type>()
+            {
+                { "application/vnd.mcb.tripwithstops+json", typeof(TripWithStopsModel) },
+                { "application/vnd.mcb.tripwithstopsandusers+json", typeof(TripWithStopsAndUsersModel) },
+                { "application/vnd.mcb.tripwithcountries+json", typeof(TripWithCountriesModel) },
+                { "application/vnd.mcb.tripwithcountriesandstats+json", typeof(TripWithCountriesAndStatsModel) },
+                { "application/vnd.mcb.tripwithcountriesandworldheritages+json", typeof(TripWithCountriesAndWorldHeritagesModel) }
+            };
+
             switch (operation.OperationId)
             {
                 case "GetTrip":
 
                     foreach (var mediaType in mediaTypesGetTripDictionary)
+                    {
+                        operation.Responses[StatusCodes.Status200OK.ToString()].Content.Add(
+                            mediaType.Key,
+                            new OpenApiMediaType()
+                            {
+                                Schema = context.SchemaRegistry.GetOrRegister(mediaType.Value)
+                            });
+                    }
+                    break;
+
+                case "GetTrips":
+
+                    foreach (var mediaType in mediaTypesGetTripsDictionary)
                     {
                         operation.Responses[StatusCodes.Status200OK.ToString()].Content.Add(
                             mediaType.Key,

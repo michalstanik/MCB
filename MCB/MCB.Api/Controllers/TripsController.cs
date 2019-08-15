@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MCB.Api.Controllers
@@ -14,7 +15,6 @@ namespace MCB.Api.Controllers
     [Route("api/trips/")]
     [Produces("application/json")]
     [ApiController]
-    [Authorize]
     public class TripsController : ControllerBase
     {
         private readonly ITripRepository _repository;
@@ -42,12 +42,22 @@ namespace MCB.Api.Controllers
         [RequestHeaderMatchesMediaType("Accept", new[] {
             "application/json",
             "application/vnd.mcb.trip+json" })]
-        [Authorize]
         public async Task<ActionResult<TripModel>> GetTrip(int id)
         {
             return await GetSpecificTrip<TripModel>(id);
         }
 
+        [HttpGet()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/vnd.mcb.trip+json")]
+        [RequestHeaderMatchesMediaType("Accept", new[] {
+            "application/json",
+            "application/vnd.mcb.trip+json" })]
+        public async Task<ActionResult<List<TripModel>>> GetTrips()
+        {
+            return await GetListOfTrips<TripModel>();
+        }
+         
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Produces("application/vnd.mcb.tripwithstops+json")]
@@ -55,6 +65,15 @@ namespace MCB.Api.Controllers
         public async Task<ActionResult<TripWithStopsModel>> GetTripWithStops(int id)
         {
             return await GetSpecificTrip<TripWithStopsModel>(id, true);
+        }
+
+        [HttpGet()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/vnd.mcb.tripwithstops+json")]
+        [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithstops+json" })]
+        public async Task<ActionResult<List<TripWithStopsModel>>> GetTripsWithStops()
+        {
+            return await GetListOfTrips<TripWithStopsModel>(true);
         }
 
         [HttpGet("{id}")]
@@ -66,6 +85,15 @@ namespace MCB.Api.Controllers
             return await GetSpecificTrip<TripWithStopsAndUsersModel>(id, true, true);
         }
 
+        [HttpGet()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/vnd.mcb.tripwithstopsandusers+json")]
+        [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithstopsandusers+json" })]
+        public async Task<ActionResult<List<TripWithStopsAndUsersModel>>> GetTripsWithStopsAndUsers()
+        {
+            return await GetListOfTrips<TripWithStopsAndUsersModel>(true, true);
+        }
+
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Produces("application/vnd.mcb.tripwithcountries+json")]
@@ -73,6 +101,15 @@ namespace MCB.Api.Controllers
         public async Task<ActionResult<TripWithCountriesModel>> GetTripWithCountries(int id)
         {
             return await GetSpecificTrip<TripWithCountriesModel>(id, true);
+        }
+
+        [HttpGet()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/vnd.mcb.tripwithcountries+json")]
+        [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithcountries+json" })]
+        public async Task<ActionResult<List<TripWithCountriesModel>>> GetTripsWithCountries(int id)
+        {
+            return await GetListOfTrips<TripWithCountriesModel>(true);
         }
 
         [HttpGet("{id}")]
@@ -84,6 +121,15 @@ namespace MCB.Api.Controllers
             return await GetSpecificTrip<TripWithCountriesAndStatsModel>(id, true, true);
         }
 
+        [HttpGet()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/vnd.mcb.tripwithcountriesandstats+json")]
+        [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithcountriesandstats+json" })]
+        public async Task<ActionResult<List<TripWithCountriesAndStatsModel>>> GetTripsWithCountriesAndStats(int id)
+        {
+            return await GetListOfTrips<TripWithCountriesAndStatsModel>(true, true);
+        }
+
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Produces("application/vnd.mcb.tripwithcountriesandworldheritages+json")]
@@ -91,6 +137,28 @@ namespace MCB.Api.Controllers
         public async Task<ActionResult<TripWithCountriesAndWorldHeritagesModel>> GetTripWithCountriesAndWorldHeritages(int id)
         {
             return await GetSpecificTrip<TripWithCountriesAndWorldHeritagesModel>(id, true, true);
+        }
+
+        [HttpGet()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/vnd.mcb.tripwithcountriesandworldheritages+json")]
+        [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripwithcountriesandworldheritages+json" })]
+        public async Task<ActionResult<List<TripWithCountriesAndWorldHeritagesModel>>> GetTripsWithCountriesAndWorldHeritages(int id)
+        {
+            return await GetListOfTrips<TripWithCountriesAndWorldHeritagesModel>(true, true);
+        }
+
+        [HttpGet()]
+        private async Task<ActionResult<List<T>>> GetListOfTrips<T>(bool includeStops = false, bool includeUsers = false) where T : class
+        {
+            var tripsFromRepo = await _repository.GetTripsByUser(_userInfoService.UserId,includeStops, includeUsers);
+
+            if (tripsFromRepo == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(_mapper.Map<List<T>>(tripsFromRepo));
         }
 
         private async Task<ActionResult<T>> GetSpecificTrip<T>(int tripId, bool includeStops = false, bool includeUsers = false) where T : class
