@@ -48,10 +48,6 @@ namespace TWM.IDP
                 .AddConfigurationStore(options =>
                     options.ConfigureDbContext = builder =>
                         builder.UseSqlServer(_connectionString, sqlOptions => sqlOptions.MigrationsAssembly(_migrationsAssembly)))
-                .AddTestUsers(Config.GetUsers())
-                .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryClients(Config.GetClients())
                 .AddAspNetIdentity<IdentityUser>();
 
 
@@ -70,6 +66,7 @@ namespace TWM.IDP
 
             app.UseCors(c => c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
+            //Only in Dev and should be manage by parameter
             InitializeDbTestData(app);
 
             app.UseIdentityServer();
@@ -80,6 +77,9 @@ namespace TWM.IDP
         {
             using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
+
+                scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.EnsureDeleted();
+
                 scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
                 scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>().Database.Migrate();
                 scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();

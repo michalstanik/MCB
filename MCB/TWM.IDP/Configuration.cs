@@ -59,7 +59,7 @@ namespace TWM.IDP
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
                 new IdentityResource {
-                    Name = "roles",
+                    Name = "role",
                     UserClaims = new List<string> {"role"}
                 }
             };
@@ -68,7 +68,7 @@ namespace TWM.IDP
         public static IEnumerable<ApiResource> GetApiResources()
         {
             return new List<ApiResource> {
-                new ApiResource("tripwithmeapi", "Trip With Me API", new[] { "roles" })
+                new ApiResource("tripwithmeapi", "Trip With Me API", new[] { "role"})
             };
         }
     }
