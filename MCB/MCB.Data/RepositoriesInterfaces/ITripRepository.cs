@@ -11,5 +11,6 @@ namespace MCB.Data.RepositoriesInterfaces
 
         //Get
         Task<Trip> GetTrip(int tripId, bool includeStops = false, bool includeUsers = false);
+        Task<bool> CheckUserPermissionsForTrip(int tripId, string userId);
     }
 }

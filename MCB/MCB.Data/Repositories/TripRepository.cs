@@ -19,6 +19,20 @@ namespace MCB.Data.Repositories
             _context.Add(entity);
         }
 
+        public async Task<bool> CheckUserPermissionsForTrip(int tripId, string userId)
+        {
+            var trip = await _context.Trip.Where(t => t.Id == tripId).FirstOrDefaultAsync();
+
+            if (trip != null)
+            {
+                foreach (var user in trip.Users())
+                {
+                    if (user.Id == userId) return true;
+                }
+            }
+            return false;
+        }
+
         public async Task<Trip> GetTrip(int tripId, bool includeStops = false, bool includeUsers = false)
         {
             IQueryable<Trip> query = _context.Trip.Where(t => t.Id == tripId);

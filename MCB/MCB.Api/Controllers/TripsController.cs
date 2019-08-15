@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MCB.Business.CoreHelper.Attributes;
+using MCB.Business.CoreHelper.UserInterfaces;
 using MCB.Business.Models.Trips;
 using MCB.Data.RepositoriesInterfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -19,12 +20,15 @@ namespace MCB.Api.Controllers
         private readonly ITripRepository _repository;
         private readonly IMapper _mapper;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IUserInfoService _userInfoService;
 
-        public TripsController(ITripRepository repository, IMapper mapper, LinkGenerator linkGenerator)
+        public TripsController(ITripRepository repository, IMapper mapper, LinkGenerator linkGenerator,
+            IUserInfoService userInfoService)
         {
             _repository = repository;
             _mapper = mapper;
             _linkGenerator = linkGenerator;
+            _userInfoService = userInfoService;
         }
 
         /// <summary>
@@ -91,11 +95,23 @@ namespace MCB.Api.Controllers
 
         private async Task<ActionResult<T>> GetSpecificTrip<T>(int tripId, bool includeStops = false, bool includeUsers = false) where T : class
         {
-            var tripFromRepo = await _repository.GetTrip(tripId, includeStops, includeUsers);
+            var tripFromRepo = await _repository.GetTrip(tripId , includeStops, includeUsers);
 
             if (tripFromRepo == null)
             {
                 return BadRequest();
+            }
+
+            if(_userInfoService.Role == "Administrator")
+            {
+                return Ok(_mapper.Map<T>(tripFromRepo));
+            }
+
+            var userPermissionToTheTrip = await _repository.CheckUserPermissionsForTrip(tripId, _userInfoService.UserId);
+
+            if(userPermissionToTheTrip != true && _userInfoService.Role != "Administrator")
+            {
+                return Unauthorized(StatusCodes.Status403Forbidden);
             }
 
             return Ok(_mapper.Map<T>(tripFromRepo));

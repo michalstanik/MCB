@@ -6,11 +6,14 @@ using System.Reflection;
 using AutoMapper;
 using IdentityServer4.AccessTokenValidation;
 using MCB.Api.OperationFilters;
+using MCB.Api.Services;
+using MCB.Business.CoreHelper.UserInterfaces;
 using MCB.Data;
 using MCB.Data.Repositories;
 using MCB.Data.RepositoriesInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -124,6 +127,9 @@ namespace MCB.Api
             services.AddTransient<MCBDataSeeder>();
             services.AddScoped<IGeoRepository, GeoRepository>();
             services.AddScoped<ITripRepository, TripRepository>();
+            services.AddScoped<IUserInfoService, UserInfoService>();
+            // register an IHttpContextAccessor so we can access the current HttpContext in services by injecting it
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDbContext<MCBContext>(cfg =>
             {
