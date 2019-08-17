@@ -27,6 +27,56 @@ namespace MCB.Data
             var secondUser = new TUser() { Id = "c3b7f625-c07f-4d7d-9be1-ddff8ff93b4d", UserName = "Aga" };
 
             var countryAzerbaijan = _context.Country.Where(c => c.Alpha3Code == "AZE").FirstOrDefault();
+            var countryMexico = _context.Country.Where(c => c.Alpha3Code == "MEX").FirstOrDefault();
+            var countryThailand = _context.Country.Where(c => c.Alpha3Code == "THA").FirstOrDefault();
+            var countryCambodia = _context.Country.Where(c => c.Alpha3Code == "KHM").FirstOrDefault();
+            var countryVietnam = _context.Country.Where(c => c.Alpha3Code == "VNM").FirstOrDefault();
+
+            var firstAsiaTrip = new Trip()
+            {
+                Name = "My First Asia Trip",
+                TripManager = firstUser,
+                UserTrips = new List<UserTrip>()
+                {
+                    new UserTrip() { TUser = firstUser}
+                },
+                Stops = new List<Stop>()
+                {
+                    new Stop()
+                    {
+                        Name = "Bangok",
+                        Description = "First Day in Bangok",
+                        Order = 1,
+                        Arrival = new DateTime(2016, 10, 31),
+                        Departure = new DateTime(2016, 11, 1),
+                        Country = countryThailand,
+                        Latitude = 00.000000,
+                        Longitude = 00.000000,                       
+                    },
+                    new Stop()
+                    {
+                        Name = "Cambodia",
+                        Description = "First Day in Cambodia",
+                        Order = 1,
+                        Arrival = new DateTime(2016, 11, 2),
+                        Departure = new DateTime(2016, 11, 4),
+                        Country = countryCambodia,
+                        Latitude = 00.000000,
+                        Longitude = 00.000000,
+                    },
+                    new Stop()
+                    {
+                        Name = "Vietnam",
+                        Description = "First Day in Vietnam",
+                        Order = 1,
+                        Arrival = new DateTime(2016, 11, 7),
+                        Departure = new DateTime(2016, 11, 14),
+                        Country = countryVietnam,
+                        Latitude = 00.000000,
+                        Longitude = 00.000000,
+                    }
+                }
+            };
 
             var azerbaijanTrip = new Trip()
             {
@@ -64,7 +114,7 @@ namespace MCB.Data
                     }
                 }
             };
-            _context.AddRange(azerbaijanTrip);
+            _context.AddRange(azerbaijanTrip, firstAsiaTrip);
             await _context.SaveChangesAsync();
         }
     }
