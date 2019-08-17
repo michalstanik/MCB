@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
 import { UserManager, User, WebStorageStateStore } from 'oidc-client';
 import { environment } from 'src/environments/environment';
 
@@ -8,11 +7,11 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AuthService {
-    private _userManager: UserManager;
-    private _user: User;
+    private userManager: UserManager;
+    private user: User;
 
     constructor(private httpClient: HttpClient) {
-        var config = {
+        const config = {
             authority: environment.stsAuthority,
             client_id: environment.clientId,
             redirect_uri: `${environment.clientRoot}assets/oidc-login-redirect.html`,
@@ -21,31 +20,31 @@ export class AuthService {
             post_logout_redirect_uri: `${environment.clientRoot}?postLogout=true`,
             userStore: new WebStorageStateStore({ store: window.localStorage })
         };
-        this._userManager = new UserManager(config);
-        this._userManager.getUser().then(user => {
+        this.userManager = new UserManager(config);
+        this.userManager.getUser().then(user => {
             if (user && !user.expired) {
-                this._user = user;
+                this.user = user;
             }
         });
     }
 
     login(): Promise<any> {
-        return this._userManager.signinRedirect();
+        return this.userManager.signinRedirect();
     }
 
     logout(): Promise<any> {
-        return this._userManager.signoutRedirect();
+        return this.userManager.signoutRedirect();
     }
 
     isLoggedIn(): boolean {
-        return this._user && this._user.access_token && !this._user.expired;
+        return this.user && this.user.access_token && !this.user.expired;
     }
 
     getAccessToken(): string {
-        return this._user ? this._user.access_token : '';
+        return this.user ? this.user.access_token : '';
     }
 
     signoutRedirectCallback(): Promise<any> {
-        return this._userManager.signoutRedirectCallback();
+        return this.userManager.signoutRedirectCallback();
     }
 }

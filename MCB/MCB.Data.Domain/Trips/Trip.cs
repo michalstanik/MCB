@@ -68,7 +68,9 @@ namespace MCB.Data.Domain.Trips
                 { "countriesCount", Countries().Count() },
                 { "stopsCount", Stops.Count() },
                 { "userCount", Users().Count() },
-                { "worldHeritages", WorldHeritages().Count() }
+                { "worldHeritages", WorldHeritages().Count() },
+                { "yearOfTrip", Stops.Select(s => s.Arrival.Year).Max() },
+                { "numberOfDays", System.Convert.ToInt32(System.Math.Floor((Stops.Select(s => s.Arrival).Max() - Stops.Select(s => s.Arrival).Min()).TotalDays)) }
             };
 
             return statistics;

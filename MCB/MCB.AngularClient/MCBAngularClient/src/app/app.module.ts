@@ -5,15 +5,16 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MDBSpinningPreloader, MDBBootstrapModulesPro, ToastModule } from 'ng-uikit-pro-standard';
 
-//Components
+// Components
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 
-//Modules
+// Modules
 import { CoreModule } from './core/core.module';
-import { AppRoutingModule } from './app-routing.module';
+import { TripsModuleModule } from './trips-module/trips-module.module';
 
+import { routing } from "./app-routing.module";
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AppRoutingModule } from './app-routing.module';
     ToastModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
     CoreModule,
-    AppRoutingModule
+    routing,
+    TripsModuleModule
   ],
   providers: [MDBSpinningPreloader],
   bootstrap: [AppComponent]

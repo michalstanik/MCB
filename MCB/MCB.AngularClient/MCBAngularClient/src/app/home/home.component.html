@@ -20,13 +20,13 @@
                   </strong>
               </h5>
               <div *ngIf="isLoggedIn()">
-                  <a mdbBtn color="white" href="/dashboard" outline="true" mdbWavesEffect class="wow fadeInDown" data-wow-delay="0.4s">My Trips</a>
+                  <a mdbBtn color="white" href="/trips" outline="true" mdbWavesEffect class="wow fadeInDown" data-wow-delay="0.4s">My Trips</a>
                   <a mdbBtn color="white" href="/mycountries" outline="true" mdbWavesEffect class="wow fadeInDown" data-wow-delay="0.4s">My Countries</a>
               </div>
               <div *ngIf="!isLoggedIn()">
                   <a mdbBtn color="white" outline="true" mdbWavesEffect class="wow fadeInDown" data-wow-delay="0.4s" (click)="login()">Log In</a>
               </div>
-    
+
           </div>
         <!--Grid column-->
       </div>

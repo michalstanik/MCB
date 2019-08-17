@@ -3,7 +3,6 @@ using MCB.Business.CoreHelper.Attributes;
 using MCB.Business.CoreHelper.UserInterfaces;
 using MCB.Business.Models.Trips;
 using MCB.Data.RepositoriesInterfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;

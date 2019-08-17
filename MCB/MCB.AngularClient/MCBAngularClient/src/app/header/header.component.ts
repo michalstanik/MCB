@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../core/auth.service';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,18 +10,18 @@ import { AuthService } from '../core/auth.service';
 export class HeaderComponent {
 
   constructor(
-    private _authService: AuthService
+    private authService: AuthService
   ) {
 
   }
 
   logout() {
-    this._authService.logout();
+    this.authService.logout();
   }
 
 
   isLoggedIn() {
-    return this._authService.isLoggedIn();
+    return this.authService.isLoggedIn();
   }
 
 }

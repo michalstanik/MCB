@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AuthService } from '../core/auth.service';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -9,21 +9,17 @@ import { AuthService } from '../core/auth.service';
 })
 export class HomeComponent implements OnInit {
 
-
   constructor(
-    private _authService: AuthService
+    private authService: AuthService
   ) {}
 
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   login() {
-    this._authService.login();
+    this.authService.login();
   }
 
   isLoggedIn() {
-    return this._authService.isLoggedIn();
+    return this.authService.isLoggedIn();
   }
 }

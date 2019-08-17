@@ -72,6 +72,12 @@ namespace MCB.Api
             .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore) //ignores self reference object 
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2); //validate api rules
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOriginsHeadersAndMethods",
+                    builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            });
+
             services.AddSwaggerGen(setupAction =>
             {
                 setupAction.SwaggerDoc("MCBOpenAPISpecification",
@@ -153,7 +159,10 @@ namespace MCB.Api
             }
 
             app.UseHttpsRedirection();
-            
+
+            // Enable CORS
+            app.UseCors("AllowAllOriginsHeadersAndMethods");
+
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
