@@ -1,4 +1,4 @@
-export interface Statistics {
+export class Statistics {
   countriesCount: number;
   stopsCount: number;
   userCount: number;

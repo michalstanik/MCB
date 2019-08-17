@@ -1,6 +1,7 @@
 ﻿using MCB.Data.Domain.Geo;
 using MCB.Data.Domain.User;
 using MCB.Data.Domain.WorldHeritages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -70,10 +71,21 @@ namespace MCB.Data.Domain.Trips
                 { "userCount", Users().Count() },
                 { "worldHeritages", WorldHeritages().Count() },
                 { "yearOfTrip", Stops.Select(s => s.Arrival.Year).Max() },
-                { "numberOfDays", System.Convert.ToInt32(System.Math.Floor((Stops.Select(s => s.Arrival).Max() - Stops.Select(s => s.Arrival).Min()).TotalDays)) }
+                { "numberOfDays", System.Convert.ToInt32(System.Math.Floor((Stops.Select(s => s.Departure).Max() - Stops.Select(s => s.Arrival).Min()).TotalDays)) }
             };
 
             return statistics;
+        }
+
+        public IDictionary<string, DateTime> Dates()
+        {
+            var dates = new Dictionary<string, DateTime>
+            {
+                { "startDate", Stops.Select(s => s.Arrival.Date).Min() },
+                { "endDate", Stops.Select(s => s.Departure.Date).Max() }
+            };
+
+            return dates;
         }
     }
 }

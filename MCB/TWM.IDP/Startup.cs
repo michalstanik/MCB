@@ -39,7 +39,6 @@ namespace TWM.IDP
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc();
-            //var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
                 .AddOperationalStore(options =>
