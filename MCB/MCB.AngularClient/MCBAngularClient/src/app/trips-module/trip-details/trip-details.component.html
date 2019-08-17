@@ -1,4 +1,4 @@
-<p>trip-details works!</p>
+<app-countries-list *ngIf='trip.countries && trip.countries.length'
+                    [countriesForTrip]="trip.countries">
 
-{{trip.name}}
-{{trip.worldHeritages.every}}
+</app-countries-list>
