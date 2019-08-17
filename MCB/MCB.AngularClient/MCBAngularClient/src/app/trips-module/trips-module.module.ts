@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 // Components
 import { TripsRootComponent } from './trips-root/trips-root.component';
 import { TripsListComponent } from './trips-list/trips-list.component';
+import { TripDetailsComponent } from './trip-details/trip-details.component';
 
 // Modules
 import { CoreModule } from '../core/core.module';
@@ -13,7 +14,7 @@ import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
 
 
 @NgModule({
-  declarations: [TripsRootComponent, TripsListComponent, TripThumbnailComponent],
+  declarations: [TripsRootComponent, TripsListComponent, TripThumbnailComponent, TripDetailsComponent],
   imports: [
     MDBBootstrapModulesPro.forRoot(),
     CommonModule,

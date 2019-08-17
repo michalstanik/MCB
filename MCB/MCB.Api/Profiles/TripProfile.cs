@@ -7,6 +7,7 @@ namespace MCB.Api.Profiles
         public TripProfile()
         {
             CreateMap<Data.Domain.Trips.Trip, Business.Models.Trips.TripModel>();
+            CreateMap<Data.Domain.Trips.Trip, Business.Models.Trips.TripFullModel>();
             CreateMap<Data.Domain.Trips.Trip, Business.Models.Trips.TripWithStopsModel>();
             CreateMap<Data.Domain.Trips.Trip, Business.Models.Trips.TripWithStopsAndUsersModel>();
             CreateMap<Data.Domain.Trips.Trip, Business.Models.Trips.TripWithCountriesModel>();

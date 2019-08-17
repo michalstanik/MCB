@@ -57,6 +57,7 @@ namespace MCB.Api
                 if (jsonOutputFormatter != null)
                 {
                     jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.trip+json");
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.tripfull+json");
                     jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.tripwithstops+json");
                     jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.tripwithstopsandusers+json");
                     jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.mcb.tripwithcountries+json");

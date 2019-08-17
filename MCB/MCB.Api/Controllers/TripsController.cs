@@ -46,6 +46,15 @@ namespace MCB.Api.Controllers
             return await GetSpecificTrip<TripModel>(id);
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/vnd.mcb.tripfull+json")]
+        [RequestHeaderMatchesMediaType("Accept", new[] { "application/vnd.mcb.tripfull+json" })]
+        public async Task<ActionResult<TripFullModel>> GetTripFull(int id)
+        {
+            return await GetSpecificTrip<TripFullModel>(id, true, true);
+        }
+
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Produces("application/vnd.mcb.trip+json")]

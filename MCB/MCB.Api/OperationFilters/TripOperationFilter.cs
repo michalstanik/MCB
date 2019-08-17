@@ -14,6 +14,7 @@ namespace MCB.Api.OperationFilters
             var mediaTypesGetTripDictionary = new Dictionary<string, Type>()
             {
                 { "application/vnd.mcb.tripwithstops+json", typeof(TripWithStopsModel) },
+                { "application/vnd.mcb.tripfull+json", typeof(TripFullModel) },
                 { "application/vnd.mcb.tripwithstopsandusers+json", typeof(TripWithStopsAndUsersModel) },
                 { "application/vnd.mcb.tripwithcountries+json", typeof(TripWithCountriesModel) },
                 { "application/vnd.mcb.tripwithcountriesandstats+json", typeof(TripWithCountriesAndStatsModel) },
